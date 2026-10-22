@@ -11,6 +11,7 @@ export default {
           inkSoft: "#4A4335",
           paper: "#FAF9F5",
           paperDim: "#F0EEE6",
+          muted: "#ABA394",
           green: "#1C6B45",
           greenDeep: "#134F34",
           red: "#C23C19",

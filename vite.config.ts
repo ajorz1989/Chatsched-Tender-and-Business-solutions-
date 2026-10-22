@@ -51,6 +51,8 @@ export default defineConfig({
       workbox: {
         cleanupOutdatedCaches: true,
         globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
+        // The admin back office is large and no visitor needs it cached up front.
+        globIgnores: ['**/Admin-*.js'],
         navigateFallbackDenylist: [/^\/admin/],
       },
       includeAssets: ['favicon.svg', 'icons/apple-touch-icon.png'],

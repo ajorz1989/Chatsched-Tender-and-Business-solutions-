@@ -19,7 +19,7 @@ const SOCIAL_LINKS = [
 ] as const;
 
 const LINK_CLASS = "block text-sm py-1 mb-1 hover:text-billboard-yellow transition-colors break-words";
-const HEADING_CLASS = "font-mono text-xs uppercase tracking-wider text-[#8A8272] mb-3";
+const HEADING_CLASS = "font-mono text-xs uppercase tracking-wider text-billboard-muted mb-3";
 
 export default function Footer() {
   const { t } = useTranslation("common");
@@ -90,35 +90,17 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Newsletter strip */}
-        <div className="py-8 border-b border-[#3A342B]">
-          <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-            <div className="flex-1">
-              <p className="font-semibold text-billboard-paper text-sm mb-0.5">Stay in the loop</p>
-              <p className="text-xs text-[#8A8272]">ChatSched insights, straight to your inbox. No spam.</p>
-            </div>
-            <a
-              href={`mailto:${CONTACT_EMAIL}?subject=Newsletter subscription&body=Please add me to the ChatSched newsletter.`}
-              className="inline-flex items-center gap-2 border-2 border-billboard-yellow text-billboard-yellow font-semibold text-sm px-4 py-2.5 rounded hover:bg-billboard-yellow hover:text-billboard-ink transition"
-            >
-              Subscribe via email
-            </a>
-            <a
-              href={`mailto:${CONTACT_EMAIL}`}
-              className="font-mono text-xs text-[#8A8272] hover:text-billboard-yellow transition shrink-0"
-            >
-              {CONTACT_EMAIL}
-            </a>
-          </div>
-        </div>
+        {/* Who we are not (draft wording: a South African attorney must approve it). */}
+        <p className="py-6 border-b border-[#3A342B] text-xs text-billboard-muted max-w-3xl">
+          ChatSched is not a law firm, audit firm, accounting firm, registered tax practitioner or B-BBEE verification agency. Regulated work is done by independent, qualified partners.
+        </p>
 
         {/* Bottom bar */}
-        <div className="pt-5 text-xs text-[#8A8272] flex flex-wrap justify-between gap-2">
+        <div className="pt-5 text-xs text-billboard-muted flex flex-wrap justify-between gap-2">
           <span>{t("footer.copyright")}</span>
           <span className="flex flex-wrap gap-x-4 gap-y-1">
             <Link to="/privacy" className="hover:text-billboard-yellow">{t("footer.privacyPolicy")}</Link>
             <Link to="/terms" className="hover:text-billboard-yellow">{t("footer.terms")}</Link>
-            <span>{t("footer.liveAcrossSA")}</span>
           </span>
         </div>
       </div>

@@ -5,6 +5,7 @@ import { useAuth } from "../hooks/useAuth";
 import { useNotifications } from "../hooks/useNotifications";
 import NotificationList from "./NotificationList";
 import type { Notification } from "../lib/types";
+import { whatsappLink } from "../lib/constants";
 
 function HomeIcon() {
   return (
@@ -44,8 +45,25 @@ function BellIcon() {
   );
 }
 
+function CheckIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <rect x="4" y="3" width="12" height="14" rx="1.5" stroke="currentColor" strokeWidth="1.6" />
+      <path d="m7.5 10.5 2 2 3.5-4" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
+function ChatIcon() {
+  return (
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+      <path d="M3 5.5A1.5 1.5 0 0 1 4.5 4h11A1.5 1.5 0 0 1 17 5.5v7a1.5 1.5 0 0 1-1.5 1.5H9l-3.5 3v-3h-1A1.5 1.5 0 0 1 3 12.5v-7Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 const tabCls = ({ isActive }: { isActive: boolean }) =>
-  `flex flex-col items-center justify-center gap-0.5 flex-1 h-full text-[11px] font-semibold transition-colors ${
+  `flex flex-col items-center justify-center gap-0.5 flex-1 h-full text-xs font-semibold transition-colors ${
     isActive ? "text-billboard-greenDeep" : "text-billboard-inkSoft"
   }`;
 
@@ -114,28 +132,56 @@ export default function BottomNav() {
           <BrowseIcon />
           Tenders
         </NavLink>
-        <NavLink to={dashboardTo} className={tabCls}>
-          <DashboardIcon />
-          {dashboardLabel}
-        </NavLink>
-        <button
-          type="button"
-          onClick={handleBellTap}
-          aria-label={t("nav.notifications")}
-          className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full text-[11px] font-semibold transition-colors ${
-            sheetOpen ? "text-billboard-greenDeep" : "text-billboard-inkSoft"
-          }`}
-        >
-          <span className="relative">
-            <BellIcon />
-            {user && unreadCount > 0 && (
-              <span className="absolute -top-1 -right-1.5 min-w-[15px] h-[15px] px-[3px] flex items-center justify-center rounded-full bg-billboard-red text-white text-[11px] font-mono font-bold border-2 border-billboard-paper">
-                {unreadCount > 9 ? "9+" : unreadCount}
-              </span>
-            )}
-          </span>
-          {t("nav.alerts")}
-        </button>
+        {user ? (
+          <>
+            <NavLink to={dashboardTo} className={tabCls}>
+              <DashboardIcon />
+              {dashboardLabel}
+            </NavLink>
+          <button
+            type="button"
+            onClick={handleBellTap}
+            aria-label={t("nav.notifications")}
+            className={`flex flex-col items-center justify-center gap-0.5 flex-1 h-full text-xs font-semibold transition-colors ${
+              sheetOpen ? "text-billboard-greenDeep" : "text-billboard-inkSoft"
+            }`}
+          >
+            <span className="relative">
+              <BellIcon />
+              {user && unreadCount > 0 && (
+                <span className="absolute -top-1 -right-1.5 min-w-[15px] h-[15px] px-[3px] flex items-center justify-center rounded-full bg-billboard-red text-white text-[11px] font-mono font-bold border-2 border-billboard-paper">
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              )}
+            </span>
+            {t("nav.alerts")}
+          </button>
+          </>
+        ) : (
+          <>
+            {/* Logged-out visitors get the main action and a human, not a login tab and an alerts bell. */}
+            <NavLink
+              to="/tender-readiness"
+              data-cta="bottom-nav-readiness"
+              className={({ isActive }) =>
+                `flex flex-col items-center justify-center gap-0.5 flex-1 h-full text-xs font-semibold bg-billboard-yellow text-billboard-ink ${isActive ? "underline" : ""}`
+              }
+            >
+              <CheckIcon />
+              Free check
+            </NavLink>
+            <a
+              href={whatsappLink("Hi, I'd like help with tenders and compliance")}
+              target="_blank"
+              rel="noopener noreferrer"
+              aria-label="Message us on WhatsApp (opens in a new tab)"
+              className="flex flex-col items-center justify-center gap-0.5 flex-1 h-full text-xs font-semibold text-billboard-inkSoft"
+            >
+              <ChatIcon />
+              WhatsApp
+            </a>
+          </>
+        )}
       </nav>
 
       {sheetOpen && (

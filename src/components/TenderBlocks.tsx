@@ -25,16 +25,31 @@ export function CtaLink({ to, children, variant = "" }: { to: string; children: 
   );
 }
 
-export function TenderHero({
-  eyebrow, title, subtitle, children,
-}: { eyebrow: string; title: string; subtitle: string; children?: ReactNode }) {
+/** A quiet text link for actions that should not compete with the main buttons. */
+export function TextLink({ to, children }: { to: string; children: ReactNode }) {
   return (
-    <section className="py-16 md:py-24 bg-billboard-yellow border-b-[3px] border-billboard-ink">
+    <Link to={to} className="font-bold underline underline-offset-4 decoration-2 hover:no-underline">
+      {children}
+    </Link>
+  );
+}
+
+export function TenderHero({
+  eyebrow, title, subtitle, children, footer, aside,
+}: { eyebrow: string; title: string; subtitle: string; children?: ReactNode; footer?: ReactNode; aside?: ReactNode }) {
+  return (
+    <section className="py-12 md:py-24 bg-billboard-yellow border-b-[3px] border-billboard-ink">
       <div className="max-w-6xl mx-auto px-5">
-        <span className="eyebrow">{eyebrow}</span>
-        <h1 className="font-display text-4xl md:text-6xl leading-tight mb-4 max-w-4xl">{title}</h1>
-        <p className="text-lg max-w-2xl mb-7">{subtitle}</p>
-        {children && <div className="flex flex-col sm:flex-row flex-wrap gap-3 items-start sm:items-center">{children}</div>}
+        <div className={aside ? "grid md:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)] gap-10 items-center" : ""}>
+          <div>
+            <span className="eyebrow on-yellow">{eyebrow}</span>
+            <h1 className="font-display text-4xl md:text-6xl leading-tight mb-4 max-w-4xl">{title}</h1>
+            <p className="text-lg max-w-2xl mb-7">{subtitle}</p>
+            {children && <div className="flex flex-col sm:flex-row flex-wrap gap-3 items-start sm:items-center">{children}</div>}
+            {footer && <p className="mt-5 text-sm">{footer}</p>}
+          </div>
+          {aside && <div className="hidden md:block">{aside}</div>}
+        </div>
       </div>
     </section>
   );
@@ -44,13 +59,14 @@ export function TenderSection({
   tone = "white", eyebrow, title, intro, children,
 }: { tone?: Tone; eyebrow?: string; title?: string; intro?: string; children?: ReactNode }) {
   const dark = tone === "ink" || tone === "green";
+  const eyebrowCls = dark ? "light" : tone === "yellow" ? "on-yellow" : "";
   return (
     <section className={`py-16 md:py-24 border-b-[3px] border-billboard-ink ${TONE[tone]}`}>
       <div className="max-w-6xl mx-auto px-5">
         {(eyebrow || title || intro) && (
           <div className="max-w-3xl mb-8 md:mb-10">
-            {eyebrow && <span className={`eyebrow ${dark ? "light" : ""}`}>{eyebrow}</span>}
-            {title && <h2 className="text-3xl md:text-5xl mb-3">{title}</h2>}
+            {eyebrow && <span className={`eyebrow ${eyebrowCls}`.trim()}>{eyebrow}</span>}
+            {title && <h2 className="text-3xl md:text-5xl leading-[1.1] mb-3">{title}</h2>}
             {intro && <p className={`max-w-prose ${dark ? "text-billboard-paperDim" : "text-billboard-inkSoft"}`}>{intro}</p>}
           </div>
         )}
@@ -62,15 +78,19 @@ export function TenderSection({
 
 export interface CardItem {
   title: string;
-  body: string;
+  body: ReactNode;
   to?: string;
   tag?: string;
+  /** Optional tick list shown under the body (for example, what a package includes). */
+  list?: string[];
 }
 
 export function CardGrid({ items, numbered = false, cols = 3 }: { items: CardItem[]; numbered?: boolean; cols?: 2 | 3 | 4 }) {
   const grid = cols === 4 ? "md:grid-cols-2 lg:grid-cols-4" : cols === 2 ? "md:grid-cols-2" : "md:grid-cols-3";
+  // Only steps that really are in order are announced as a numbered list.
+  const List = numbered ? "ol" : "ul";
   return (
-    <ol className={`grid ${grid} gap-4 list-none p-0 m-0`}>
+    <List className={`grid ${grid} gap-4 list-none p-0 m-0`}>
       {items.map((item, i) => {
         const inner = (
           <>
@@ -82,9 +102,19 @@ export function CardGrid({ items, numbered = false, cols = 3 }: { items: CardIte
                 {i + 1}
               </span>
             )}
-            {item.tag && <span className="font-mono text-[11px] font-bold uppercase text-billboard-greenDeep mb-2">{item.tag}</span>}
+            {item.tag && <span className="font-mono text-xs font-bold uppercase text-billboard-greenDeep mb-2">{item.tag}</span>}
             <h3 className="font-display text-xl mb-2">{item.title}</h3>
-            <p className="text-sm text-billboard-inkSoft leading-relaxed flex-1">{item.body}</p>
+            <p className={`text-sm text-billboard-inkSoft leading-relaxed ${item.list ? "" : "flex-1"}`}>{item.body}</p>
+            {item.list && (
+              <ul className="mt-3 flex-1 grid gap-1.5 list-none p-0 m-0 text-sm text-billboard-inkSoft">
+                {item.list.map((entry) => (
+                  <li key={entry} className="flex gap-2">
+                    <span aria-hidden="true" className="font-display text-billboard-greenDeep">✓</span>
+                    <span>{entry}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
             {item.to && <span className="font-bold text-sm mt-4">Learn more →</span>}
           </>
         );
@@ -99,7 +129,7 @@ export function CardGrid({ items, numbered = false, cols = 3 }: { items: CardIte
           </li>
         );
       })}
-    </ol>
+    </List>
   );
 }
 

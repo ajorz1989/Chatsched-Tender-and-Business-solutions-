@@ -15,7 +15,7 @@ body {
   width: 100%;
   max-width: 100%;
   overflow-x: clip;
-  overflow-wrap: anywhere;
+  overflow-wrap: break-word;
 }
 
 #root {
@@ -52,10 +52,22 @@ h1, h2, h3 {
   outline-offset: 2px;
 }
 
-/* The green ring is invisible on the ink-black sections, so use yellow there. */
+/* The default green ring disappears on some section colours, so each coloured
+   section gets a ring that contrasts with it: yellow on ink (9.9:1), ink on
+   yellow (9.9:1), white on green (6.5:1). */
 .bg-billboard-ink :focus-visible,
 .bg-billboard-ink:focus-visible {
   outline-color: #F5B700;
+}
+
+.bg-billboard-yellow :focus-visible,
+.bg-billboard-yellow:focus-visible {
+  outline-color: #1A1712;
+}
+
+.bg-billboard-green :focus-visible,
+.bg-billboard-green:focus-visible {
+  outline-color: #FFFFFF;
 }
 
 input:focus-visible,
@@ -63,12 +75,6 @@ textarea:focus-visible,
 select:focus-visible {
   outline: 3px solid #1C6B45;
   outline-offset: 2px;
-}
-
-/* The green ring is invisible on the ink-black sections, so use yellow there. */
-.bg-billboard-ink :focus-visible,
-.bg-billboard-ink:focus-visible {
-  outline-color: #F5B700;
 }
 
 .skeleton-shimmer {
@@ -116,8 +122,9 @@ select:focus-visible {
 }
 
 /* Homepage brand primitives — intentionally flat, hard-edged and billboard-led. */
-.eyebrow { display:inline-block; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; line-height:1.2; font-weight:700; letter-spacing:.08em; text-transform:uppercase; border:2px solid #F5B700; color:#1A1712; padding:6px 10px; border-radius:6px; margin-bottom:12px; }
+.eyebrow { display:inline-block; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:12px; line-height:1.2; font-weight:700; letter-spacing:.08em; text-transform:uppercase; border:2px solid #F5B700; color:#1A1712; padding:6px 10px; border-radius:6px; margin-bottom:12px; }
 .eyebrow.light { border-color:#F5B700; color:#F5B700; }
+.eyebrow.on-yellow { border-color:#1A1712; }
 .eyebrow.dark-bg { background:#FAF9F5; border-color:#1A1712; }
 .brand-button { display:inline-flex; align-items:center; justify-content:center; gap:8px; border:3px solid #1A1712; background:#FAF9F5; color:#1A1712; font-weight:700; padding:11px 18px; border-radius:6px; transition:transform .15s ease,box-shadow .15s ease; max-width:100%; text-align:center; white-space:normal; overflow-wrap:anywhere; }
 .brand-button:hover { transform:translate(-2px,-2px); box-shadow:5px 5px 0 #1A1712; }

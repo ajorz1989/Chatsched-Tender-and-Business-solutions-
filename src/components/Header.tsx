@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useAuth } from "../hooks/useAuth";
@@ -27,6 +27,7 @@ export default function Header() {
   const { t } = useTranslation("common");
   const [menuOpen, setMenuOpen] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const servicesRef = useRef<HTMLDivElement>(null);
 
   function closeMenu() {
     setMenuOpen(false);
@@ -46,6 +47,16 @@ export default function Header() {
     return () => document.removeEventListener("keydown", onKey);
   }, [menuOpen, servicesOpen]);
 
+  // Clicking or tapping anywhere outside the Services menu closes it.
+  useEffect(() => {
+    if (!servicesOpen) return;
+    const onDown = (e: MouseEvent) => {
+      if (servicesRef.current && !servicesRef.current.contains(e.target as Node)) setServicesOpen(false);
+    };
+    document.addEventListener("mousedown", onDown);
+    return () => document.removeEventListener("mousedown", onDown);
+  }, [servicesOpen]);
+
   const accountTo = profile?.role === "admin" ? "/admin" : "/account";
   const accountLabel = profile?.role === "admin" ? "Admin" : "Account";
 
@@ -57,19 +68,19 @@ export default function Header() {
         </Link>
 
         <nav className="hidden lg:flex items-center gap-5 font-semibold text-sm whitespace-nowrap">
-          <div className="relative">
+          <div className="relative" ref={servicesRef}>
             <button
               type="button"
-              aria-haspopup="menu"
               aria-expanded={servicesOpen}
+              aria-controls="services-menu"
               onClick={() => setServicesOpen((open) => !open)}
               className="inline-flex items-center gap-1 hover:text-billboard-greenDeep transition-colors"
             >
               Services
-              <span className={`text-[11px] transition-transform ${servicesOpen ? "rotate-180" : ""}`}>▾</span>
+              <span aria-hidden="true" className={`text-xs transition-transform ${servicesOpen ? "rotate-180" : ""}`}>▾</span>
             </button>
             {servicesOpen && (
-              <div className="absolute top-full left-0 mt-3 w-60 border-2 border-billboard-ink rounded-lg bg-white shadow-blockSm p-2">
+              <div id="services-menu" className="absolute top-full left-0 mt-3 w-60 border-2 border-billboard-ink rounded-lg bg-white shadow-blockSm p-2">
                 {SERVICE_LINKS.map((link) => (
                   <NavLink
                     key={link.to}
@@ -116,11 +127,11 @@ export default function Header() {
 
       {menuOpen && (
         <>
-          <div className="lg:hidden fixed inset-0 top-[55px] sm:top-[59px] z-40 bg-billboard-ink/30" onClick={closeMenu} aria-hidden="true" />
-          <nav aria-label="Mobile navigation" className="lg:hidden absolute left-0 right-0 z-50 bg-billboard-paper border-b-[3px] border-billboard-ink shadow-blockSm max-h-[calc(100vh-55px)] sm:max-h-[calc(100vh-59px)] overflow-y-auto">
+          <div className="lg:hidden absolute inset-x-0 top-full h-screen z-40 bg-billboard-ink/30" onClick={closeMenu} aria-hidden="true" />
+          <nav aria-label="Mobile navigation" className="lg:hidden absolute left-0 right-0 top-full z-50 bg-billboard-paper border-b-[3px] border-billboard-ink shadow-blockSm max-h-[calc(100dvh-4rem)] overflow-y-auto">
             <div className="max-w-6xl mx-auto px-5 py-4">
               <div className="border-2 border-billboard-ink rounded-lg bg-white p-2 mb-3">
-                <div className="font-mono text-[11px] uppercase tracking-wider text-billboard-inkSoft px-2 py-1">Services</div>
+                <div className="font-mono text-xs uppercase tracking-wider text-billboard-inkSoft px-2 py-1">Services</div>
                 {SERVICE_LINKS.map((link) => (
                   <NavLink
                     key={link.to}
