@@ -8,7 +8,7 @@ import { useHoneypot } from "../hooks/useHoneypot";
 import { whatsappLink, CONTACT_EMAIL, LEGAL_EMAIL, SALES_EMAIL, PARTNERS_EMAIL, CONTACT_WEBSITE, CONTACT_ADDRESS_LINES, WHATSAPP_NUMBER_DISPLAY } from "../lib/constants";
 
 const WHATSAPP_LINK = whatsappLink("Hi, I'd like help with tenders and compliance");
-const MAPS_LINK = "https://www.google.com/maps/search/?api=1&query=Century%20Boulevard%2C%20Century%20City%20Dr%2C%20Century%20City%2C%20Cape%20Town%2C%207440";
+const MAPS_LINK = "https://www.google.com/maps/search/?api=1&query=Century%20Boulevard%2C%20Century%20City%20Dr%2C%20Century%20City%2C%20Cape%20Town%2C%207441";
 
 export default function Contact() {
   const [name, setName] = useState("");

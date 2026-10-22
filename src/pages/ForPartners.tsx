@@ -41,7 +41,7 @@ export default function ForPartners() {
             { title: "Apply", body: "Tell us who you are and what you offer." },
             { title: "We verify", body: "We check your professional registration or membership where it applies, and references." },
             { title: "List your services", body: "Fixed-price services you are happy to deliver." },
-            { title: "Get clients", body: "We send you clients and handle the scheduling." },
+            { title: "Get clients", body: "We introduce clients who need your service. You agree the time and price with them." },
           ]}
         />
       </TenderSection>

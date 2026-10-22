@@ -57,8 +57,8 @@ export default function ComplianceSetup() {
           items={[
             { title: "Choose the service", body: "Tell us what you need." },
             { title: "See the price", body: "The partner's fixed price and what's included are quoted before you pay." },
-            { title: "Get booked", body: "We connect you and handle scheduling." },
-            { title: "Track progress", body: "Follow what's done and what's next." },
+            { title: "Get booked", body: "We introduce you to the partner and help you agree a time." },
+            { title: "Follow up", body: "We check in with you and the partner until the work is done." },
           ]}
         />
       </TenderSection>

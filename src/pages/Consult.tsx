@@ -18,8 +18,8 @@ export default function Consult() {
       />
       <TenderHero
         eyebrow="Talk to a person"
-        title="Real advice, booked in minutes."
-        subtitle="Pick a topic and tell us when suits you. A person confirms your time, who will deliver it, and a fixed price before you pay."
+        title="Real advice from a real person."
+        subtitle="Send a request with a topic and when suits you. A person replies to confirm your time, who will deliver it, and a fixed price before you pay."
       />
 
       <TenderSection tone="white" eyebrow="Free and paid" title="Start free. Pay only when you choose to.">

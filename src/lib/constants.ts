@@ -251,13 +251,8 @@ export const CREATOR_APPROVAL_WINDOW_DAYS = 30;  // changed from 7 — publisher
 export const BUSINESS_PAYMENT_WINDOW_DAYS = 7;   // business must pay within this many days of creator approval
 export const CREATOR_PAYOUT_WINDOW_HOURS = 48;   // creator is paid within this many hours of the post going live
 
-export const PLATFORM_BANK_DETAILS = {
-  accountHolder: "Chatsched",
-  bank: "Capitec Bank",
-  accountNumber: "1149592735",
-  branchCode: "470010",
-  accountType: "Business / Cheque",
-};
+// Bank details are intentionally NOT stored in the repository. Show them only
+// from a private source (database row behind auth, or an invoice sent directly).
 
 export const MAX_PORTFOLIO_IMAGES = 5;
 export const MAX_PORTFOLIO_IMAGE_BYTES = 3 * 1024 * 1024;
