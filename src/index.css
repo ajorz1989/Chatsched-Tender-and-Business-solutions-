@@ -1,0 +1,132 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  scroll-behavior: smooth;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+body {
+  @apply font-body text-billboard-ink bg-billboard-paper antialiased;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: clip;
+  overflow-wrap: anywhere;
+}
+
+#root {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+img,
+video,
+canvas,
+iframe {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+select,
+textarea {
+  max-width: 100%;
+}
+
+fieldset {
+  min-width: 0;
+}
+
+h1, h2, h3 {
+  @apply font-display tracking-tight;
+}
+
+:focus-visible {
+  outline: 3px solid #1C6B45;
+  outline-offset: 2px;
+}
+
+/* The green ring is invisible on the ink-black sections, so use yellow there. */
+.bg-billboard-ink :focus-visible,
+.bg-billboard-ink:focus-visible {
+  outline-color: #F5B700;
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  outline: 3px solid #1C6B45;
+  outline-offset: 2px;
+}
+
+/* The green ring is invisible on the ink-black sections, so use yellow there. */
+.bg-billboard-ink :focus-visible,
+.bg-billboard-ink:focus-visible {
+  outline-color: #F5B700;
+}
+
+.skeleton-shimmer {
+  position: relative;
+  overflow: hidden;
+}
+
+.skeleton-shimmer::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(90deg, transparent, rgba(26, 23, 18, 0.06), transparent);
+  animation: skeleton-sweep 1.6s ease-in-out infinite;
+}
+
+@keyframes skeleton-sweep {
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+
+@keyframes page-fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Space for the fixed mobile bottom tab bar (BottomNav.tsx), which is
+   14 (3.5rem) tall plus the iOS home-indicator safe area. Only needed
+   below the sm breakpoint, where the bar actually renders. */
+@media (max-width: 639px) {
+  .pb-bottom-nav {
+    padding-bottom: calc(3.5rem + env(safe-area-inset-bottom));
+  }
+}
+
+/* Homepage brand primitives — intentionally flat, hard-edged and billboard-led. */
+.eyebrow { display:inline-block; font-family:ui-monospace,SFMono-Regular,Menlo,monospace; font-size:11px; line-height:1.2; font-weight:700; letter-spacing:.08em; text-transform:uppercase; border:2px solid #F5B700; color:#1A1712; padding:6px 10px; border-radius:6px; margin-bottom:12px; }
+.eyebrow.light { border-color:#F5B700; color:#F5B700; }
+.eyebrow.dark-bg { background:#FAF9F5; border-color:#1A1712; }
+.brand-button { display:inline-flex; align-items:center; justify-content:center; gap:8px; border:3px solid #1A1712; background:#FAF9F5; color:#1A1712; font-weight:700; padding:11px 18px; border-radius:6px; transition:transform .15s ease,box-shadow .15s ease; max-width:100%; text-align:center; white-space:normal; overflow-wrap:anywhere; }
+.brand-button:hover { transform:translate(-2px,-2px); box-shadow:5px 5px 0 #1A1712; }
+.brand-button.dark { background:#1A1712; color:#FAF9F5; }
+.brand-button.yellow { background:#F5B700; color:#1A1712; }
+.brand-button.light { background:#FAF9F5; color:#1A1712; }
+@media (prefers-reduced-motion:reduce) { .brand-button { transition:none; } .brand-button:hover { transform:none; box-shadow:none; } }
+
+/* Decorative loops stop while their section is off-screen (usePauseOffscreen). */
+.pause-offscreen[data-offscreen="true"] *,
+.pause-offscreen[data-offscreen="true"] *::before,
+.pause-offscreen[data-offscreen="true"] *::after { animation-play-state: paused !important; }

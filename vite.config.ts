@@ -1,0 +1,74 @@
+import { defineConfig } from 'vite'
+import react from '@vitejs/plugin-react'
+import { VitePWA } from 'vite-plugin-pwa'
+
+// https://vite.dev/config/
+export default defineConfig({
+  server: {
+    host: '0.0.0.0',
+    port: 3000,
+  },
+  build: {
+    chunkSizeWarningLimit: 600,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes('node_modules')) {
+            // Match on the package name, not a substring of the whole path:
+            // `id.includes('react')` also caught react-leaflet, @sentry/react
+            // and friends, dragging the map library into the chunk every page
+            // (including the homepage) downloads.
+            const pkg = id.split('node_modules/').pop() ?? '';
+            if (/^(react|react-dom|react-router|react-router-dom|scheduler|use-sync-external-store)\//.test(pkg)) {
+              return 'vendor-react';
+            }
+            if (pkg.startsWith('@supabase')) {
+              return 'vendor-supabase';
+            }
+            if (pkg.startsWith('@sentry')) {
+              return 'vendor-sentry';
+            }
+            if (pkg.startsWith('i18next') || pkg.startsWith('react-i18next')) {
+              return 'vendor-i18n';
+            }
+          }
+        },
+      },
+    },
+  },
+  plugins: [
+    react(),
+    VitePWA({
+      registerType: 'autoUpdate',
+      // Only the app shell (JS/CSS/icons/fonts) is precached — deliberately
+      // no runtimeCaching for Supabase or PayFast. This is a live
+      // marketplace (request statuses, payments, messages, notifications)
+      // where a cached API response would be actively misleading, not
+      // just stale. The service worker's job here is "load the app
+      // instantly and offer a real app icon", not "work fully offline" —
+      // that would need a very different, request-flow-aware caching
+      // strategy this data doesn't fit.
+      workbox: {
+        cleanupOutdatedCaches: true,
+        globPatterns: ['**/*.{js,css,html,svg,png,ico,woff2}'],
+        navigateFallbackDenylist: [/^\/admin/],
+      },
+      includeAssets: ['favicon.svg', 'icons/apple-touch-icon.png'],
+      manifest: {
+        name: 'ChatSched',
+        short_name: 'ChatSched',
+        description: 'Tenders, RFQs and small business compliance help for South African businesses.',
+        start_url: '/',
+        scope: '/',
+        display: 'standalone',
+        background_color: '#FAF9F5',
+        theme_color: '#1A1712',
+        icons: [
+          { src: '/icons/icon-192.png', sizes: '192x192', type: 'image/png' },
+          { src: '/icons/icon-512.png', sizes: '512x512', type: 'image/png' },
+          { src: '/icons/icon-512-maskable.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+        ],
+      },
+    }),
+  ],
+})
